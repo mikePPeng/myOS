@@ -62,6 +62,8 @@ void SystemClock_Config(void);
   * @brief  The application entry point.
   * @retval int
   */
+
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -88,24 +90,13 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
   HAL_GPIO_WritePin(GPIOH, GPIO_PIN_11, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(GPIOH, GPIO_PIN_12, GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+  extern void task_sample_entry(void);
+  task_sample_entry();
 
-  while (1)
-  {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-	  printf("hello world!\r\n");
-	  HAL_GPIO_TogglePin(GPIOH, GPIO_PIN_10);
-	  HAL_Delay(3000);
-  }
-  /* USER CODE END 3 */
 }
 
 /**
