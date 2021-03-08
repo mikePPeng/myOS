@@ -64,6 +64,22 @@ static inline void __list_add(struct list_head *new,
 }
 
 /*
+ * This function is used to add a new entry in list, between @prev and @next.
+ * Input:
+ * new:   entry to be added
+ * prev:  entry before @new
+ * next:  entry after @new
+ * Output:
+ * none
+ */
+static inline void list_add_between(struct list_head *new,
+                                    struct list_head *prev,
+                                    struct list_head *next)
+{
+    __list_add(new, prev, next);
+}
+
+/*
  * This function is used to add a new entry after @head.
  * Input:
  * new:   entry to be added

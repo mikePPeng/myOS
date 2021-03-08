@@ -4,6 +4,7 @@
  * Change Logs:
  * Date           Notes
  * Feb 23, 2021   the first version
+ * Mar  3, 2021   add priority to task
  */
 
 #ifndef __TASK_H__
@@ -15,6 +16,7 @@
 #include <string.h>
 
 #include "kernel/common.h"
+#include "kernel/interrupt.h"
 
 #define NAME_MAX_LEN 20
 #define IDLE_STACK_SIZE 200
@@ -26,25 +28,33 @@ typedef enum task_state {
 } task_state;
 
 typedef struct task_control_block {
-    char           name[NAME_MAX_LEN];
-    uint32_t      *sp;
-    void          *entry;
-    void          *parameter;
-    task_state     state;
+    char             name[NAME_MAX_LEN];
+    uint32_t        *sp;
+    void            *entry;
+    void            *parameter;
+    task_state       state;
 
-    void          *stack_addr;
-    uint32_t       stack_size;
+    void            *stack_addr;
+    uint32_t         stack_size;
 
     //used for task delay
-    uint32_t       delay_tick;
-    uint32_t       delay_tick_left;
+    uint32_t         delay_tick;
+    uint32_t         delay_tick_left;
 
     //used for time slice
-    uint32_t       init_tick;
-    uint32_t       init_tick_left;
+    uint32_t         init_tick;
+    uint32_t         init_tick_left;
+
+    uint8_t          prio;
 
     struct list_head list;
 } tcb_t, *p_tcb_t;
+
+typedef struct priority_list {
+    uint8_t          prio;
+    struct list_head task_list_head;   //task list head for each priority
+    struct list_head list;
+}prio_list_t, *p_prio_list_t;
 
 /*
  * This function is used to create a task with given task stack.
@@ -64,6 +74,7 @@ err_t task_create_static(p_tcb_t task_handler,
                          const char *name,
                          void (*entry) (void *parameter),
                          void *parameter,
+                         uint8_t prio,
                          void *stack_addr,
                          uint32_t stack_size,
                          uint32_t init_tick);
@@ -85,6 +96,7 @@ err_t task_create(p_tcb_t task_handler,
                   const char *name,
                   void (*entry) (void *parameter),
                   void *parameter,
+                  uint8_t prio,
                   uint32_t stack_size,
                   uint32_t init_tick);
 
