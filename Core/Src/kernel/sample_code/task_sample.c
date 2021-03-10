@@ -8,6 +8,10 @@
 
 #include "kernel/task.h"
 
+static int t1 = 1;
+static int t2 = 2;
+static int t3 = 3;
+
 void task_entry(void *para)
 {
     int num = *(int *)para;
@@ -30,16 +34,13 @@ void dummy_entry(void *para)
 
 void task_sample_entry(void)
 {
-    tcb_t task1_handler;
-    tcb_t task2_handler;
-    tcb_t task3_handler;
-    int t1 = 1;
-    int t2 = 2;
-    int t3 = 3;
+    p_tcb_t task1_handler = (p_tcb_t)malloc(sizeof(tcb_t));
+    p_tcb_t task2_handler = (p_tcb_t)malloc(sizeof(tcb_t));
+    p_tcb_t task3_handler = (p_tcb_t)malloc(sizeof(tcb_t));
 
-    task_create(&task1_handler, "task1", task_entry, &t1, 1, 0x500, 0xffffffff);
-    task_create(&task2_handler, "task2", task_entry, &t2, 2, 0x500, 0xffffffff);
-    task_create(&task3_handler, "task3", task_entry, &t3, 3, 0x500, 0xffffffff);
+    task_create(task1_handler, "task1", task_entry, &t1, 1, 0x200, 0xffffffff);
+    task_create(task2_handler, "task2", task_entry, &t2, 2, 0x200, 0xffffffff);
+    task_create(task3_handler, "task3", task_entry, &t3, 3, 0x200, 0xffffffff);
 
     os_start_schedule();
 }

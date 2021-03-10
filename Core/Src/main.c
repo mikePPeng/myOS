@@ -94,8 +94,11 @@ int main(void)
   HAL_GPIO_WritePin(GPIOH, GPIO_PIN_12, GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
-  extern void task_sample_entry(void);
-  task_sample_entry();
+//  extern void task_sample_entry(void);
+//  task_sample_entry();
+
+  extern void soft_timer_sample_entry(void);
+  soft_timer_sample_entry();
 
 }
 

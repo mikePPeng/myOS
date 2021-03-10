@@ -56,7 +56,7 @@ void insert_task_to_list(p_tcb_t task_handler)
 
                 if (&itr_next->list != &g_prio_list_head) {   //@itr is not the last entry of the list
 
-                    if (task_handler->prio > itr->prio && task_handler->prio < itr_next->prio) {
+                    if (task_handler->prio < itr_next->prio) {
                         p_prio_list_t prio_list = NULL;
                         prio_list = create_prio_list_entry(task_handler);
 
@@ -79,6 +79,20 @@ void insert_task_to_list(p_tcb_t task_handler)
     }
 }
 
+/*
+ * This function is used to create a task with given task stack.
+ * Input:
+ * task_handler: task control block of task
+ * name:         name of the task
+ * entry:        task body
+ * parameter:    parameter of task body
+ * stack_addr:   task stack start address
+ * stack_size:   task stack size in byte
+ * init_tick:    task time slice in tick
+ * Output:
+ * create result: 0 - ok
+ *                1 - fail
+ */
 err_t task_create_static(p_tcb_t task_handler,
                          const char *name,
                          void (*entry) (void *parameter),
@@ -134,6 +148,19 @@ err_t task_create_static(p_tcb_t task_handler,
     return ERR_OK;
 }
 
+/*
+ * This function is used to create a task without given task stack.
+ * Input:
+ * task_handler: task control block of task
+ * name:         name of the task
+ * entry:        task body
+ * parameter:    parameter of task body
+ * stack_size:   task stack size in byte
+ * init_tick:    task time slice in tick
+ * Output:
+ * create result: 0 - ok
+ *                1 - fail
+ */
 err_t task_create(p_tcb_t task_handler,
                   const char *name,
                   void (*entry) (void *parameter),
@@ -158,9 +185,17 @@ void idle_entry(void *para)
     while (1);
 }
 
+/*
+ * This function is used to create the idle task.
+ * Input:
+ * none
+ * Output:
+ * none
+ */
 err_t idle_task_create(void)
 {
     void *idle_stack = (void *)malloc(IDLE_STACK_SIZE);
+    g_cur_task = &g_idle_handle;
     return task_create_static(&g_idle_handle,
                               "idle_task",
                               idle_entry,
@@ -171,26 +206,61 @@ err_t idle_task_create(void)
                               1);
 }
 
+/*
+ * This function is used to get psp of next task.
+ * Input:
+ * none
+ * Output:
+ * next psp
+ */
 uint32_t *get_next_psp(void)
 {
     return g_next_task->sp;
 }
 
+/*
+ * This function is used to get psp of current task.
+ * Input:
+ * none
+ * Output:
+ * next psp
+ */
 uint32_t *get_current_psp(void)
 {
     return g_cur_task->sp;
 }
 
+/*
+ * This function is used to save psp of current task.
+ * Input:
+ * sp: current psp
+ * Output:
+ * none
+ */
 void save_current_psp(uint32_t *sp)
 {
     g_cur_task->sp = sp;
 }
 
+/*
+ * This function is used to update current task with next task after context switching.
+ * Input:
+ * none
+ * Output:
+ * none
+ */
 void update_cur_with_next(void)
 {
     g_cur_task = g_next_task;
 }
 
+/*
+ * This function is used to get the next task to schedule.
+ * Input:
+ * none
+ * Output:
+ * none
+ */
 void get_next_task(void)
 {
     //for now no priority is implemented
@@ -218,6 +288,13 @@ void get_next_task(void)
     }
 }
 
+/*
+ * This function is used to schedule task.
+ * Input:
+ * none
+ * Output:
+ * none
+ */
 void task_schedule(void)
 {
     uint32_t level = interrupt_disable();
@@ -232,6 +309,13 @@ void task_schedule(void)
 
 }
 
+/*
+ * This function is used to delay a task for given ticks.
+ * Input:
+ * tick: tick count to delay
+ * Output:
+ * none
+ */
 void task_delay(uint32_t tick)
 {
     g_cur_task->delay_tick = tick;
@@ -240,6 +324,13 @@ void task_delay(uint32_t tick)
     task_schedule();
 }
 
+/*
+ * This function is used to show task info.
+ * Input:
+ * task_handler: task control block of task
+ * Output:
+ * none
+ */
 void show_task_info(p_tcb_t task_handler)
 {
     char str[10] = {0};
@@ -259,7 +350,14 @@ void show_task_info(p_tcb_t task_handler)
     printf("task state: %15s | task psp: %21p\r\n", str, task_handler->sp);
 }
 
-void update_task_state()
+/*
+ * This function is used to update task state
+ * Input:
+ * none
+ * Output:
+ * none
+ */
+void update_task_state(void)
 {
     p_prio_list_t prio_itr = NULL;
     list_for_each_entry(prio_itr, &g_prio_list_head, list) {
@@ -308,11 +406,18 @@ __attribute__((naked)) void switch_msp_to_psp(void)
     __asm volatile("MSR CONTROL, R0"); //write CONTROL register, SPSEL = 1
     __asm volatile("BX LR");
 }
+
+/*
+ * This function is used to start os schedule
+ * Input:
+ * none
+ * Output:
+ * none
+ */
 void os_start_schedule(void)
 {
     //initialize
     idle_task_create();
-    g_cur_task = &g_idle_handle;
 
     switch_msp_to_psp();
 
@@ -321,6 +426,13 @@ void os_start_schedule(void)
     ((void (*) (void *))g_cur_task->entry)(g_cur_task->parameter);
 }
 
+/*
+ * This function is used to get handler of current task.
+ * Input:
+ * none
+ * Output:
+ * current task handler
+ */
 p_tcb_t task_get_self(void)
 {
     return g_cur_task;

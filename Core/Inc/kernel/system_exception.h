@@ -8,8 +8,8 @@
 
 #ifndef __SYSTEM_EXCEPTION_H__
 #define __SYSTEM_EXCEPTION_H__
-#include "kernel/task.h"
-#include "stm32f4xx_hal.h"
 
+#include "kernel/task.h"
+#include "kernel/soft_timer.h"
 
 #endif

@@ -21,6 +21,9 @@ struct list_head {
     struct list_head *next, *prev;
 };
 
+#define NAME_MAX_LEN 20
+
+
 #define offset_of(type, member) ((size_t) &((type *)0)->member)
 
 #define container_of(ptr, type, member) ({             \
@@ -31,7 +34,7 @@ struct list_head {
 
 #define list_head_init(name) struct list_head name = { &(name), &(name) }
 
-#define list_empty(head) (head)->next == head
+#define list_empty(head) ((head)->next == (head))
 
 #define list_for_each_entry(itr, head, member)                       \
     for (itr = container_of((head)->next, typeof(*itr), member);     \

@@ -18,7 +18,6 @@
 #include "kernel/common.h"
 #include "kernel/interrupt.h"
 
-#define NAME_MAX_LEN 20
 #define IDLE_STACK_SIZE 200
 
 typedef enum task_state {
@@ -101,40 +100,13 @@ err_t task_create(p_tcb_t task_handler,
                   uint32_t init_tick);
 
 /*
- * This function is used to get the next task to schedule.
+ * This function is used to update task state
  * Input:
  * none
  * Output:
  * none
  */
-void get_next_task(void);
-
-/*
- * This function is used to get psp of next task.
- * Input:
- * none
- * Output:
- * next psp
- */
-uint32_t *get_next_psp(void);
-
-/*
- * This function is used to save psp of current task.
- * Input:
- * sp: current psp
- * Output:
- * none
- */
-void save_current_psp(uint32_t *sp);
-
-/*
- * This function is used to update current task with next task after context switching.
- * Input:
- * none
- * Output:
- * none
- */
-void update_cur_with_next(void);
+void update_task_state(void);
 
 /*
  * This function is used to schedule task.
@@ -162,24 +134,6 @@ void task_delay(uint32_t tick);
  * none
  */
 void show_task_info(p_tcb_t task_handler);
-
-/*
- * This function is used to create the idle task.
- * Input:
- * none
- * Output:
- * none
- */
-err_t idle_task_create(void);
-
-/*
- * This function is used to update task state
- * Input:
- * none
- * Output:
- * none
- */
-void update_task_state(void);
 
 /*
  * This function is used to start os schedule

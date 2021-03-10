@@ -36,7 +36,8 @@ __attribute__((naked)) void PendSV_Handler(void)
 
 void SysTick_Handler(void)
 {
-    HAL_IncTick();
+    //HAL_IncTick();
+    soft_timer_check();
 
     update_task_state();
 
