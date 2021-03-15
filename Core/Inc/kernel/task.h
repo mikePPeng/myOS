@@ -5,6 +5,7 @@
  * Date           Notes
  * Feb 23, 2021   the first version
  * Mar  3, 2021   add priority to task
+ * Mar 11, 2021   add ipc support to task
  */
 
 #ifndef __TASK_H__
@@ -17,6 +18,7 @@
 
 #include "kernel/common.h"
 #include "kernel/interrupt.h"
+#include "kernel/soft_timer.h"
 
 #define IDLE_STACK_SIZE 200
 
@@ -46,6 +48,14 @@ typedef struct task_control_block {
 
     uint8_t          prio;
 
+    //software timer for ipc
+    soft_timer_t     soft_timer;
+    err_t            error;
+
+    uint32_t         event;
+    uint32_t         event_flag;
+
+    //list for scheduler
     struct list_head list;
 } tcb_t, *p_tcb_t;
 
@@ -98,6 +108,15 @@ err_t task_create(p_tcb_t task_handler,
                   uint8_t prio,
                   uint32_t stack_size,
                   uint32_t init_tick);
+
+/*
+ * This function is used to insert the given task into task schedule list.
+ * Input:
+ * task_handler: handler of task
+ * Output:
+ * none
+ */
+void insert_task_to_list(p_tcb_t task_handler);
 
 /*
  * This function is used to update task state

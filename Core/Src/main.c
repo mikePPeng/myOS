@@ -97,9 +97,17 @@ int main(void)
 //  extern void task_sample_entry(void);
 //  task_sample_entry();
 
-  extern void soft_timer_sample_entry(void);
-  soft_timer_sample_entry();
+//  extern void soft_timer_sample_entry(void);
+//  soft_timer_sample_entry();
 
+//  extern void semaphore_sample_entry(void);
+//  semaphore_sample_entry();
+
+//  extern void mutex_sample_entry(void);
+//  mutex_sample_entry();
+
+  extern void event_sample_entry(void);
+  event_sample_entry();
 }
 
 /**

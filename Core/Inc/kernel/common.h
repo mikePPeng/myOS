@@ -15,13 +15,14 @@
 typedef enum error_code {
     ERR_OK = 0,
     ERR_FAIL,
+    ERR_TIMEOUT,
 } err_t;
 
 struct list_head {
     struct list_head *next, *prev;
 };
 
-#define NAME_MAX_LEN 20
+#define NAME_MAX_LEN 16
 
 
 #define offset_of(type, member) ((size_t) &((type *)0)->member)

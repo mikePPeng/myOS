@@ -32,6 +32,7 @@ void timeout_func(void *parameter)
     }
     if (num == 3) {
         printf("this is timer3!\r\n");
+        soft_timer_stop(&timer2);
     }
 }
 void soft_timer_sample_entry(void)

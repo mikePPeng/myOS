@@ -5,6 +5,7 @@
  * Date           Notes
  * Feb 24, 2021   the first version
  * Mar  3, 2021   add priority to task
+ * Mar 11, 2021   add ipc support to task
  */
 
 #include "kernel/task.h"
@@ -28,6 +29,13 @@ p_prio_list_t create_prio_list_entry(p_tcb_t task_handler)
     return prio_list;
 }
 
+/*
+ * This function is used to insert the given task into task schedule list.
+ * Input:
+ * task_handler: handler of task
+ * Output:
+ * none
+ */
 void insert_task_to_list(p_tcb_t task_handler)
 {
     if (list_empty(&g_prio_list_head)) {
@@ -112,6 +120,8 @@ err_t task_create_static(p_tcb_t task_handler,
     task_handler->init_tick = init_tick;
     task_handler->init_tick_left = init_tick;
     task_handler->state = TASK_READY;
+    task_handler->event = 0;
+    task_handler->error = ERR_OK;
 
     uint32_t level = interrupt_disable();
     insert_task_to_list(task_handler);
@@ -170,6 +180,9 @@ err_t task_create(p_tcb_t task_handler,
                   uint32_t init_tick)
 {
     void *stack_addr = (void *)malloc(stack_size);
+    if (stack_addr == NULL) {
+        return ERR_FAIL;
+    }
     return task_create_static(task_handler,
                               name,
                               entry,
