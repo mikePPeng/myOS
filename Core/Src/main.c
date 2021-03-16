@@ -106,8 +106,11 @@ int main(void)
 //  extern void mutex_sample_entry(void);
 //  mutex_sample_entry();
 
-  extern void event_sample_entry(void);
-  event_sample_entry();
+//  extern void event_sample_entry(void);
+//  event_sample_entry();
+
+  extern void msg_queue_sample_entry(void);
+  msg_queue_sample_entry();
 }
 
 /**

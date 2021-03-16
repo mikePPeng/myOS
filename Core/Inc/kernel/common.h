@@ -24,6 +24,7 @@ struct list_head {
 
 #define NAME_MAX_LEN 16
 
+#define ALIGN(size, align) (((size) + (align) - 1) & ~((align) - 1))
 
 #define offset_of(type, member) ((size_t) &((type *)0)->member)
 
