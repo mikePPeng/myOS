@@ -1,3 +1,0 @@
-msg_queue_sample.c:15:6:msg_send_entry	96	static
-msg_queue_sample.c:32:6:msg_recv_entry	88	static
-msg_queue_sample.c:49:6:msg_queue_sample_entry	32	static

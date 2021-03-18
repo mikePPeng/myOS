@@ -1,5 +1,0 @@
-common.c:25:7:heap_init	16	static
-common.c:68:7:os_malloc	40	static
-common.c:122:6:os_free	32	static
-stdio.h:221:5:puts	16	static
-stdio.h:200:5:printf	272	static

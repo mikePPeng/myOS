@@ -1,2 +1,0 @@
-interrupt.c:11:33:interrupt_disable	0	static,ignoring_inline_asm
-interrupt.c:18:29:interrupt_enable	0	static,ignoring_inline_asm
