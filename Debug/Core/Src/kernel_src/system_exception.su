@@ -1,0 +1,2 @@
+system_exception.c:11:29:PendSV_Handler	0	static,ignoring_inline_asm
+system_exception.c:37:6:SysTick_Handler	8	static

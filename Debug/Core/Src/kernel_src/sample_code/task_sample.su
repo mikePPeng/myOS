@@ -1,0 +1,3 @@
+task_sample.c:15:6:task_entry	24	static
+task_sample.c:25:6:dummy_entry	24	static
+task_sample.c:35:6:task_sample_entry	40	static

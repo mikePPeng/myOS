@@ -1,0 +1,2 @@
+soft_timer_sample.c:20:6:timeout_func	32	static
+soft_timer_sample.c:38:6:soft_timer_sample_entry	16	static

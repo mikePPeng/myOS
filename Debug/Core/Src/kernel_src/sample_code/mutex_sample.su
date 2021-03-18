@@ -1,0 +1,3 @@
+mutex_sample.c:16:6:high_entry	16	static
+mutex_sample.c:37:6:low_entry	24	static
+mutex_sample.c:63:6:mutex_sample_entry	32	static
